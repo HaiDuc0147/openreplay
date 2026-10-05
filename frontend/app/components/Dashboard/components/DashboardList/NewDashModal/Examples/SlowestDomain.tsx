@@ -3,6 +3,14 @@ import React from 'react';
 
 import { Circle } from './Count';
 import ExCard from './ExCard';
+import { AMBER, GREEN, ORANGE, RED, TEAL } from './palette';
+
+const speedColor = (progress: number) => {
+  if (progress >= 90) return RED;
+  if (progress >= 50) return ORANGE;
+  if (progress >= 20) return AMBER;
+  return GREEN;
+};
 
 // TODO - delete this
 function SlowestDomain(props: any) {
@@ -11,31 +19,31 @@ function SlowestDomain(props: any) {
       label: 'kroger.com',
       value: '28,162 ms',
       progress: 97,
-      icon: <LinkOutlined size={12} />,
+      icon: <LinkOutlined size={12} style={{ color: TEAL }} />,
     },
     {
       label: 'instacart.com',
       value: '3,165 ms',
       progress: 60,
-      icon: <LinkOutlined size={12} />,
+      icon: <LinkOutlined size={12} style={{ color: TEAL }} />,
     },
     {
       label: 'gifs.eco.br',
       value: '1,503 ms',
       progress: 40,
-      icon: <LinkOutlined size={12} />,
+      icon: <LinkOutlined size={12} style={{ color: TEAL }} />,
     },
     {
       label: 'cdn.byintera.com',
       value: '512 ms',
       progress: 10,
-      icon: <LinkOutlined size={12} />,
+      icon: <LinkOutlined size={12} style={{ color: TEAL }} />,
     },
     {
       label: 'analytics.twitter.com',
       value: '110 ms',
       progress: 5,
-      icon: <LinkOutlined size={12} />,
+      icon: <LinkOutlined size={12} style={{ color: TEAL }} />,
     },
   ];
 
@@ -54,7 +62,7 @@ function SlowestDomain(props: any) {
                   style={{
                     height: 2,
                     width: lineWidth * (0.01 * r.progress),
-                    background: '#394EFF',
+                    background: speedColor(r.progress),
                   }}
                   className="rounded-l"
                 />
@@ -62,13 +70,17 @@ function SlowestDomain(props: any) {
                   style={{
                     height: 2,
                     width: lineWidth - lineWidth * (0.01 * r.progress),
-                    background: '#E2E4F6',
                   }}
-                  className="rounded-r"
+                  className="rounded-r bg-gray-lighter"
                 />
               </div>
             </div>
-            <div className="min-w-8 ml-auto">{r.value}</div>
+            <div
+              className="min-w-8 ml-auto font-medium"
+              style={{ color: speedColor(r.progress) }}
+            >
+              {r.value}
+            </div>
           </div>
         ))}
       </div>
