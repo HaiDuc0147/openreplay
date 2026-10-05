@@ -9,6 +9,7 @@ import {
 import React from 'react';
 
 import ExCard from './ExCard';
+import { AMBER, BRAND, ORANGE, RED, TEAL, tint } from './palette';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -59,31 +60,36 @@ export function Frustrations() {
       label: t('Rage Clicks'),
       progress: 25,
       value: 100,
-      icon: <Angry size={12} strokeWidth={1} />,
+      color: RED,
+      icon: <Angry size={12} strokeWidth={1.5} color={RED} />,
     },
     {
       label: t('Dead Clicks'),
       progress: 75,
       value: 75,
-      icon: <MousePointerClick size={12} strokeWidth={1} />,
+      color: AMBER,
+      icon: <MousePointerClick size={12} strokeWidth={1.5} color={AMBER} />,
     },
     {
       label: t('4XX Pages'),
       progress: 50,
       value: 50,
-      icon: <Unlink size={12} strokeWidth={1} />,
+      color: ORANGE,
+      icon: <Unlink size={12} strokeWidth={1.5} color={ORANGE} />,
     },
     {
       label: t('Mouse Trashing'),
       progress: 10,
       value: 25,
-      icon: <Mouse size={12} strokeWidth={1} />,
+      color: TEAL,
+      icon: <Mouse size={12} strokeWidth={1.5} color={TEAL} />,
     },
     {
       label: t('Excessive Scrolling'),
       progress: 10,
       value: 10,
-      icon: <ArrowDownUp size={12} strokeWidth={1} />,
+      color: BRAND,
+      icon: <ArrowDownUp size={12} strokeWidth={1.5} color={BRAND} />,
     },
   ];
 
@@ -92,14 +98,16 @@ export function Frustrations() {
     <div className="flex gap-1 flex-col">
       {rows.map((r) => (
         <div className="flex items-center gap-2 border-b border-dotted py-2 last:border-0 first:pt-0 last:pb-0">
-          <Circle badgeType={0}>{r.icon}</Circle>
+          <Circle badgeType={0} color={r.color}>
+            {r.icon}
+          </Circle>
           <div>{r.label}</div>
           <div style={{ marginLeft: 'auto', marginRight: 20, display: 'flex' }}>
             <div
               style={{
                 height: 2,
                 width: lineWidth * (0.01 * r.progress),
-                background: '#394EFF',
+                background: r.color,
               }}
               className="rounded-l"
             />
@@ -107,9 +115,8 @@ export function Frustrations() {
               style={{
                 height: 2,
                 width: lineWidth - lineWidth * (0.01 * r.progress),
-                background: '#E2E4F6',
               }}
-              className="rounded-r"
+              className="rounded-r bg-gray-lighter"
             />
           </div>
           <div className="min-w-8">{r.value}</div>
@@ -126,31 +133,31 @@ export function Errors() {
       label: t('HTTP response status code (404 Not Found)'),
       value: 500,
       progress: 90,
-      icon: <div className="text-red text-xs">{t('4XX')}</div>,
+      icon: <div className="text-red text-xs font-semibold">{t('4XX')}</div>,
     },
     {
       label: t('Cross-origin request blocked'),
       value: 300,
       progress: 60,
-      icon: <div className="text-red text-xs">{t('CROS')}</div>,
+      icon: <div className="text-red text-xs font-semibold">{t('CROS')}</div>,
     },
     {
       label: t('Reference error'),
       value: 200,
       progress: 40,
-      icon: <div className="text-red text-xs">{t('RE')}</div>,
+      icon: <div className="text-red text-xs font-semibold">{t('RE')}</div>,
     },
     {
       label: 'Unhandled Promise Rejection',
       value: 50,
       progress: 20,
-      icon: <div className="text-red text-xs">{t('NULL')}</div>,
+      icon: <div className="text-red text-xs font-semibold">{t('NULL')}</div>,
     },
     {
       label: 'Failed Network Request',
       value: 10,
       progress: 5,
-      icon: <div className="text-red text-xs">{t('XHR')}</div>,
+      icon: <div className="text-red text-xs font-semibold">{t('XHR')}</div>,
     },
   ];
 
@@ -167,7 +174,7 @@ export function Errors() {
                 style={{
                   height: 2,
                   width: lineWidth * (0.01 * r.progress),
-                  background: '#394EFF',
+                  background: RED,
                 }}
                 className="rounded-l"
               />
@@ -175,9 +182,8 @@ export function Errors() {
                 style={{
                   height: 2,
                   width: lineWidth - lineWidth * (0.01 * r.progress),
-                  background: '#E2E4F6',
                 }}
-                className="rounded-r"
+                className="rounded-r bg-gray-lighter"
               />
             </div>
           </div>
@@ -230,25 +236,27 @@ export function Users() {
 export function Circle({
   children,
   badgeType,
+  color,
 }: {
   children: React.ReactNode;
   badgeType: 0 | 1 | 2 | 3;
+  color?: string;
 }) {
   const colors = {
     // frustrations
-    0: '#FFFBE6',
+    0: AMBER,
     // errors
-    1: '#FFF1F0',
+    1: RED,
     // users and domains
-    2: '#EBF4F5',
+    2: TEAL,
     // sessions by url
-    3: '#E2E4F6',
+    3: BRAND,
   };
 
   return (
     <div
       className="w-8 h-8 flex items-center justify-center rounded-full"
-      style={{ background: colors[badgeType] }}
+      style={{ background: tint(color ?? colors[badgeType]) }}
     >
       {children}
     </div>
