@@ -29,6 +29,7 @@ import CountryFlagIcon from 'Shared/CountryFlagIcon';
 
 import { getRunScreenshot } from '../../api';
 import { useProjectId, useRunHar, useTriggerRun } from '../../queries';
+import DevEmpty from '../shared/DevEmpty';
 import { harToNetworkRequests } from '../shared/adapters';
 import { ConsoleLog, NetworkRequest, RunData, TestStep } from '../shared/types';
 import {
@@ -99,18 +100,6 @@ function RunShot({ runId, name }: { runId: string; name: string }) {
   );
 }
 
-function DevEmpty({ text, fill }: { text: string; fill?: boolean }) {
-  return (
-    <div
-      className={`text-sm text-disabled-text text-center border rounded-lg ${
-        fill ? 'h-full flex items-center justify-center' : 'py-8'
-      }`}
-    >
-      {text}
-    </div>
-  );
-}
-
 /** Console output captured during the run — mirrors the session console. */
 function ConsoleView({ logs, fill }: { logs?: ConsoleLog[]; fill?: boolean }) {
   const { t } = useTranslation();
@@ -118,7 +107,8 @@ function ConsoleView({ logs, fill }: { logs?: ConsoleLog[]; fill?: boolean }) {
     return (
       <DevEmpty
         fill={fill}
-        text={t('No console output captured for this run.')}
+        icon={Terminal}
+        title={t('No console output captured')}
       />
     );
   return (
@@ -177,12 +167,19 @@ function ScreenshotsView({
     return (
       <DevEmpty
         fill={fill}
-        text={t('Run in progress — screenshots appear as it finishes.')}
+        icon={Loader}
+        tone="warning"
+        title={t('Run in progress')}
+        hint={t('Screenshots appear as it finishes.')}
       />
     );
   if (shotSteps.length === 0)
     return (
-      <DevEmpty fill={fill} text={t('No screenshots captured for this run.')} />
+      <DevEmpty
+        fill={fill}
+        icon={ImageIcon}
+        title={t('No screenshots captured')}
+      />
     );
 
   const cur = shotSteps[Math.min(stepPos, shotSteps.length - 1)];

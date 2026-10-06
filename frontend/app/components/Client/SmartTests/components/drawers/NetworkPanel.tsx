@@ -1,5 +1,5 @@
 import { Button, Tooltip } from 'antd';
-import { ChevronLeft, Copy, Download } from 'lucide-react';
+import { ChevronLeft, Copy, Download, Globe, SearchX } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { formatMs } from 'App/date';
 import { formatBytes } from 'App/utils';
 
+import DevEmpty from '../shared/DevEmpty';
 import { NetworkRequest } from '../shared/types';
 import { TINT } from '../shared/utils';
 
@@ -382,13 +383,12 @@ function NetworkPanel({
 
   if (!reqs || reqs.length === 0)
     return (
-      <div
-        className={`text-sm text-disabled-text text-center border rounded-lg ${
-          fillHeight ? 'h-full flex items-center justify-center' : 'py-8'
-        }`}
-      >
-        {t('No network activity captured for this run.')}
-      </div>
+      <DevEmpty
+        fill={fillHeight}
+        icon={Globe}
+        title={t('No network activity captured')}
+        hint={t('Requests made by the page during this run will appear here.')}
+      />
     );
 
   const cur = selected != null ? reqs[selected] : null;
@@ -476,8 +476,16 @@ function NetworkPanel({
           <span className="text-right">{t('Time')}</span>
         </div>
         {visible.length === 0 ? (
-          <div className="px-3 py-6 text-center text-disabled-text">
+          <div className="flex flex-col items-center gap-1 px-3 py-6 text-center text-gray-dark">
+            <SearchX size={16} className="text-disabled-text" />
             {t('No requests match this filter.')}
+            <button
+              type="button"
+              onClick={() => setFilter('all')}
+              className="text-main hover:underline"
+            >
+              {t('Show all requests')}
+            </button>
           </div>
         ) : (
           visible.map(({ r, idx }) => (
